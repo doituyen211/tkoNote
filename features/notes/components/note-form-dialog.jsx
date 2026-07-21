@@ -111,9 +111,9 @@ export function NoteFormDialog({ open, onOpenChange, note, onCreate, onUpdate })
                         aria-label={theme.label}
                         onClick={() => field.onChange(theme.id)}
                         className={cn(
-                          "flex flex-col items-center gap-1 rounded-xl border p-2.5 text-xs font-medium transition-colors",
+                          "flex flex-col items-center gap-1 rounded-lg bg-secondary/30 p-2.5 text-xs font-medium transition-colors",
                           theme.bg,
-                          selected ? "border-primary ring-2 ring-primary/30" : theme.border
+                          selected && "ring-2 ring-primary/40 bg-secondary/60"
                         )}
                       >
                         <span className="text-xl leading-none">{theme.emoji}</span>

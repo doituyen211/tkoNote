@@ -4,60 +4,59 @@
 
 @layer base {
   :root {
-    /* Pinterest-inspired light theme */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 7%;
+    --background: 350 60% 97%;
+    --foreground: 340 20% 15%;
     --surface: 0 0% 100%;
 
-    --primary: 354 100% 45%;
-    --primary-hover: 354 100% 38%;
+    --primary: 340 80% 60%;
+    --primary-hover: 340 80% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 94%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 350 40% 95%;
+    --secondary-foreground: 340 20% 20%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 350 30% 93%;
+    --muted-foreground: 340 10% 50%;
 
-    --accent: 354 90% 96%;
-    --accent-foreground: 354 100% 38%;
+    --accent: 340 60% 94%;
+    --accent-foreground: 340 80% 40%;
 
-    --success: 145 63% 32%;
-    --warning: 38 92% 50%;
-    --error: 354 100% 45%;
+    --success: 150 50% 40%;
+    --warning: 35 80% 50%;
+    --error: 355 70% 55%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 354 100% 45%;
+    --border: 350 30% 92%;
+    --input: 350 30% 92%;
+    --ring: 340 80% 60%;
 
-    --radius: 16px;
+    --radius: 10px;
   }
 
   .dark {
-    --background: 0 0% 7%;
-    --foreground: 0 0% 96%;
-    --surface: 0 0% 10%;
+    --background: 340 20% 8%;
+    --foreground: 350 30% 95%;
+    --surface: 340 15% 12%;
 
-    --primary: 354 90% 55%;
-    --primary-hover: 354 90% 62%;
+    --primary: 340 70% 65%;
+    --primary-hover: 340 70% 72%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 16%;
-    --secondary-foreground: 0 0% 96%;
+    --secondary: 340 15% 18%;
+    --secondary-foreground: 350 20% 90%;
 
-    --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 62%;
+    --muted: 340 15% 18%;
+    --muted-foreground: 340 10% 60%;
 
-    --accent: 354 40% 18%;
-    --accent-foreground: 354 90% 75%;
+    --accent: 340 30% 20%;
+    --accent-foreground: 340 60% 75%;
 
-    --success: 145 55% 45%;
-    --warning: 38 92% 55%;
-    --error: 354 90% 60%;
+    --success: 150 45% 50%;
+    --warning: 35 75% 55%;
+    --error: 355 65% 60%;
 
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 354 90% 55%;
+    --border: 340 15% 20%;
+    --input: 340 15% 20%;
+    --ring: 340 70% 65%;
   }
 
   * {
@@ -76,13 +75,13 @@
   :focus-visible {
     outline: 2px solid hsl(var(--ring));
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: 2px;
   }
 }
 
 @layer utilities {
   .masonry {
-    column-gap: 1.25rem;
+    column-gap: 1rem;
   }
   .masonry-sm {
     column-count: 1;
@@ -104,12 +103,12 @@
   }
   .masonry-item {
     break-inside: avoid;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
-    height: 6px;
-    width: 6px;
+    height: 4px;
+    width: 4px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
     @apply bg-border rounded-full;

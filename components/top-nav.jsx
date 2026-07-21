@@ -17,18 +17,18 @@ export function TopNav() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+          <span className="flex h-7 w-7 items-center justify-center bg-primary text-xs font-bold text-primary-foreground">
             L
           </span>
-          <span className="text-base font-semibold tracking-tight">Learnboard</span>
+          <span className="text-sm font-semibold tracking-tight">Learnboard</span>
         </Link>
 
         <nav
           aria-label="Main navigation"
-          className="hidden items-center gap-1 rounded-full border border-border bg-surface p-1 sm:flex"
+          className="hidden items-center gap-0.5 rounded-lg bg-secondary/60 p-1 sm:flex"
         >
           {LINKS.map((link) => {
             const isActive = pathname === link.href;
@@ -38,7 +38,7 @@ export function TopNav() {
                 href={link.href}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors",
+                  "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -56,7 +56,7 @@ export function TopNav() {
 
       <nav
         aria-label="Main navigation, mobile"
-        className="flex items-center justify-around border-t border-border px-2 py-1.5 sm:hidden"
+        className="flex items-center justify-around bg-secondary/40 px-2 py-1 sm:hidden"
       >
         {LINKS.map((link) => {
           const isActive = pathname === link.href;
@@ -66,7 +66,7 @@ export function TopNav() {
               href={link.href}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex flex-1 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-xs font-medium",
+                "flex flex-1 flex-col items-center gap-0.5 rounded-md px-2 py-1.5 text-xs font-medium",
                 isActive ? "text-primary" : "text-muted-foreground"
               )}
             >

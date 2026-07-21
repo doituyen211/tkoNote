@@ -49,7 +49,7 @@ export function AddVideoDialog({ onAdd, isAdding, open, onOpenChange }) {
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {!isControlled && (
         <DialogTrigger asChild>
-          <Button className="rounded-full">
+          <Button>
             <Plus className="h-4 w-4" />
             Add video
           </Button>

@@ -38,40 +38,24 @@ module.exports = {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 4px)",
-        sm: "calc(var(--radius) - 8px)",
-        xl: "calc(var(--radius) + 8px)",
-        "2xl": "calc(var(--radius) + 16px)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
         sans: [
+          "Inter",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
-          "Inter",
           "Helvetica Neue",
           "Arial",
           "sans-serif",
         ],
       },
       boxShadow: {
-        subtle: "0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06)",
-        card: "0 2px 8px 0 rgb(0 0 0 / 0.06), 0 1px 2px 0 rgb(0 0 0 / 0.04)",
-        hover: "0 12px 28px -6px rgb(0 0 0 / 0.18), 0 4px 10px -4px rgb(0 0 0 / 0.1)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        soft: "0 2px 8px -2px rgb(0 0 0 / 0.06)",
+        card: "0 4px 12px -4px rgb(0 0 0 / 0.08)",
+        hover: "0 8px 24px -6px rgb(0 0 0 / 0.12)",
       },
     },
   },

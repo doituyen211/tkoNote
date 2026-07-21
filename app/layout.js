@@ -1,7 +1,7 @@
 import "./globals.css";
-import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TopNav } from "@/components/top-nav";
+import { ToasterProvider } from "@/components/toaster-provider";
 
 export const metadata = {
   title: "Learnboard — Your learning workspace",
@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
           <main className="mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:px-8">
             {children}
           </main>
-          <Toaster position="bottom-right" richColors closeButton />
+          <ToasterProvider />
         </ThemeProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ export const SelectTrigger = React.forwardRef(({ className, children, ...props }
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 items-center justify-between gap-2 rounded-xl border border-input bg-surface px-3.5 text-sm transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "flex h-10 items-center justify-between gap-2 rounded-lg bg-secondary/50 px-3.5 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}
@@ -30,7 +30,7 @@ export function SelectContent({ className, children, ...props }) {
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
         className={cn(
-          "z-50 min-w-[160px] overflow-hidden rounded-xl border border-border bg-surface p-1 shadow-hover",
+          "z-50 min-w-[160px] overflow-hidden rounded-lg bg-surface p-1 shadow-hover",
           className
         )}
         position="popper"
@@ -47,7 +47,7 @@ export const SelectItem = React.forwardRef(({ className, children, ...props }, r
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm outline-none data-[highlighted]:bg-secondary",
+      "relative flex cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-3 text-sm outline-none data-[highlighted]:bg-secondary",
       className
     )}
     {...props}

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { PlayCircle } from "lucide-react";
+import { PlayCircle, Plus } from "lucide-react";
 import { useVideos } from "@/features/videos/hooks/use-videos";
 import { VideoGrid } from "@/features/videos/components/video-grid";
 import { VideoFilters } from "@/features/videos/components/video-filters";
 import { AddVideoDialog } from "@/features/videos/components/add-video-dialog";
+import { Button } from "@/components/ui/button";
 
 export default function VideosPage() {
   const {
@@ -24,7 +25,7 @@ export default function VideosPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent">
+          <div className="flex h-9 w-9 items-center justify-center bg-accent">
             <PlayCircle className="h-4.5 w-4.5 text-accent-foreground" aria-hidden />
           </div>
           <div>
@@ -37,6 +38,10 @@ export default function VideosPage() {
 
         <div className="flex items-center gap-2.5">
           <VideoFilters value={sort} onChange={changeSort} />
+          <Button onClick={() => setAddDialogOpen(true)}>
+            <Plus className="h-4 w-4" />
+            Add video
+          </Button>
           <AddVideoDialog
             onAdd={addVideo}
             isAdding={isAdding}

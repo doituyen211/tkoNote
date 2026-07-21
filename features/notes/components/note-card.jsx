@@ -21,9 +21,8 @@ export function NoteCard({ note, onEdit, onDelete }) {
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "masonry-item relative overflow-hidden rounded-2xl border p-5 shadow-card transition-shadow hover:shadow-hover",
-        theme.bg,
-        theme.border
+        "masonry-item relative overflow-hidden rounded-xl p-5 shadow-card transition-shadow hover:shadow-hover",
+        theme.bg
       )}
     >
       <span
@@ -36,7 +35,7 @@ export function NoteCard({ note, onEdit, onDelete }) {
       <div className="relative">
         <span
           className={cn(
-            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium",
+            "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium",
             theme.chip
           )}
         >
@@ -60,7 +59,7 @@ export function NoteCard({ note, onEdit, onDelete }) {
               size="icon"
               aria-label={`Edit ${note.title}`}
               onClick={() => onEdit(note)}
-              className="h-8 w-8 rounded-full hover:bg-white/60 dark:hover:bg-white/10"
+              className="h-8 w-8 rounded-md hover:bg-white/60 dark:hover:bg-white/10"
             >
               <Pencil className="h-3.5 w-3.5" />
             </Button>
@@ -69,7 +68,7 @@ export function NoteCard({ note, onEdit, onDelete }) {
               size="icon"
               aria-label={`Delete ${note.title}`}
               onClick={() => setConfirmOpen(true)}
-              className="h-8 w-8 rounded-full text-error hover:bg-error/10"
+              className="h-8 w-8 rounded-md text-error hover:bg-error/10"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </Button>

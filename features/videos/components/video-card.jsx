@@ -33,9 +33,9 @@ export function VideoCard({ video, onDelete, reorderable = true }) {
         layout
         whileHover={{ y: -4 }}
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="group overflow-hidden rounded-2xl border border-border bg-surface shadow-card transition-shadow hover:shadow-hover"
+        className="group overflow-hidden rounded-xl bg-surface shadow-card transition-shadow hover:shadow-hover"
       >
-        <div className="relative aspect-video w-full overflow-hidden bg-secondary">
+        <div className="relative aspect-video w-full overflow-hidden bg-secondary/50">
           <Image
             src={video.thumbnail}
             alt=""
@@ -49,9 +49,9 @@ export function VideoCard({ video, onDelete, reorderable = true }) {
               type="button"
               aria-label="Drag to reorder"
               onPointerDown={(e) => controls.start(e)}
-              className="absolute left-2 top-2 flex h-8 w-8 cursor-grab items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
+              className="absolute left-2 top-2 flex h-7 w-7 cursor-grab items-center justify-center bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
             >
-              <GripVertical className="h-4 w-4" />
+              <GripVertical className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
@@ -65,27 +65,27 @@ export function VideoCard({ video, onDelete, reorderable = true }) {
           </p>
 
           <div className="mt-3 flex items-center gap-1.5">
-            <Button asChild variant="secondary" size="sm" className="flex-1 rounded-full">
+            <Button asChild variant="secondary" size="sm" className="flex-1">
               <a href={video.url} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-3.5 w-3.5" />
                 Open
               </a>
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               aria-label="Copy link"
               onClick={handleCopy}
-              className="h-8 w-8 rounded-full"
+              className="h-8 w-8"
             >
               <Copy className="h-3.5 w-3.5" />
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               aria-label={`Delete ${video.title}`}
               onClick={() => setConfirmOpen(true)}
-              className="h-8 w-8 rounded-full text-error hover:bg-error/10"
+              className="h-8 w-8 text-error hover:bg-error/10"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </Button>
