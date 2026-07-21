@@ -1,5 +1,6 @@
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/components/providers";
 import { TopNav } from "@/components/top-nav";
 import { ToasterProvider } from "@/components/toaster-provider";
 
@@ -14,11 +15,13 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans">
         <ThemeProvider>
-          <TopNav />
-          <main className="mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:px-8">
-            {children}
-          </main>
-          <ToasterProvider />
+          <Providers>
+            <TopNav />
+            <main className="mx-auto max-w-7xl px-4 pb-24 pt-8 sm:px-6 lg:px-8">
+              {children}
+            </main>
+            <ToasterProvider />
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
