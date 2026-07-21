@@ -7,9 +7,11 @@ import { ExternalLink, Copy, Trash2, GripVertical } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { PasscodeDialog } from "@/components/passcode-dialog";
 import { formatDate } from "@/lib/utils";
 
 export function VideoCard({ video, onDelete, reorderable = true }) {
+  const [passcodeOpen, setPasscodeOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const controls = useDragControls();
 
@@ -84,7 +86,7 @@ export function VideoCard({ video, onDelete, reorderable = true }) {
               variant="ghost"
               size="icon"
               aria-label={`Delete ${video.title}`}
-              onClick={() => setConfirmOpen(true)}
+              onClick={() => setPasscodeOpen(true)}
               className="h-8 w-8 text-error hover:bg-error/10"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -92,6 +94,12 @@ export function VideoCard({ video, onDelete, reorderable = true }) {
           </div>
         </div>
       </motion.div>
+
+      <PasscodeDialog
+        open={passcodeOpen}
+        onOpenChange={setPasscodeOpen}
+        onConfirm={() => setConfirmOpen(true)}
+      />
 
       <ConfirmDialog
         open={confirmOpen}

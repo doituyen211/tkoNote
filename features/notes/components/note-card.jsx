@@ -5,10 +5,12 @@ import { motion } from "framer-motion";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { PasscodeDialog } from "@/components/passcode-dialog";
 import { formatDate, cn } from "@/lib/utils";
 import { NOTE_THEMES } from "../constants/themes";
 
 export function NoteCard({ note, onEdit, onDelete }) {
+  const [passcodeOpen, setPasscodeOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const theme = NOTE_THEMES[note.theme] ?? NOTE_THEMES.sakura;
 
@@ -67,7 +69,7 @@ export function NoteCard({ note, onEdit, onDelete }) {
               variant="ghost"
               size="icon"
               aria-label={`Delete ${note.title}`}
-              onClick={() => setConfirmOpen(true)}
+              onClick={() => setPasscodeOpen(true)}
               className="h-8 w-8 rounded-md text-error hover:bg-error/10"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -75,6 +77,12 @@ export function NoteCard({ note, onEdit, onDelete }) {
           </div>
         </div>
       </div>
+
+      <PasscodeDialog
+        open={passcodeOpen}
+        onOpenChange={setPasscodeOpen}
+        onConfirm={() => setConfirmOpen(true)}
+      />
 
       <ConfirmDialog
         open={confirmOpen}
