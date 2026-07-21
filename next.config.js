@@ -6,6 +6,7 @@ const nextConfig = {
       { protocol: "https", hostname: "img.youtube.com" },
     ],
   },
+  output: "export",
 };
 
 module.exports = nextConfig;
