@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/empty-state";
 import { NoteCard } from "./note-card";
 
-export function NoteGrid({ notes, isLoading, isSearching, onEdit, onDelete, onAddClick }) {
+export function NoteGrid({ notes, isLoading, isSearching, onView, onEdit, onDelete, onAddClick }) {
   if (isLoading) {
     return (
       <div className="masonry masonry-sm">
@@ -37,7 +37,7 @@ export function NoteGrid({ notes, isLoading, isSearching, onEdit, onDelete, onAd
     <div className="masonry masonry-sm">
       <AnimatePresence mode="popLayout">
         {notes.map((note) => (
-          <NoteCard key={note.id} note={note} onEdit={onEdit} onDelete={onDelete} />
+          <NoteCard key={note.id} note={note} onView={onView} onEdit={onEdit} onDelete={onDelete} />
         ))}
       </AnimatePresence>
     </div>

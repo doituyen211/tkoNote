@@ -6,21 +6,35 @@ import { useNotes } from "@/features/notes/hooks/use-notes";
 import { NoteGrid } from "@/features/notes/components/note-grid";
 import { NoteFilters } from "@/features/notes/components/note-filters";
 import { NoteFormDialog } from "@/features/notes/components/note-form-dialog";
+import { NoteViewDialog } from "@/features/notes/components/note-view-dialog";
 import { Button } from "@/components/ui/button";
 
 export default function NotesPage() {
   const { notes, sort, isLoading, addNote, editNote, deleteNote, changeSort } = useNotes();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
+  const [viewNote, setViewNote] = useState(null);
+  const [viewOpen, setViewOpen] = useState(false);
 
   const openCreateDialog = () => {
     setEditingNote(null);
-    setDialogOpen(true);
+    setFormOpen(true);
   };
 
   const openEditDialog = (note) => {
     setEditingNote(note);
-    setDialogOpen(true);
+    setFormOpen(true);
+  };
+
+  const openViewDialog = (note) => {
+    setViewNote(note);
+    setViewOpen(true);
+  };
+
+  const handleViewEdit = (note) => {
+    setViewNote(null);
+    setViewOpen(false);
+    openEditDialog(note);
   };
 
   return (
@@ -50,14 +64,22 @@ export default function NotesPage() {
       <NoteGrid
         notes={notes}
         isLoading={isLoading}
+        onView={openViewDialog}
         onEdit={openEditDialog}
         onDelete={deleteNote}
         onAddClick={openCreateDialog}
       />
 
+      <NoteViewDialog
+        open={viewOpen}
+        onOpenChange={setViewOpen}
+        note={viewNote}
+        onEdit={handleViewEdit}
+      />
+
       <NoteFormDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
+        open={formOpen}
+        onOpenChange={setFormOpen}
         note={editingNote}
         onCreate={addNote}
         onUpdate={editNote}

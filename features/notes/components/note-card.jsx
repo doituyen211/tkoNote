@@ -9,7 +9,7 @@ import { PasscodeDialog } from "@/components/passcode-dialog";
 import { formatDate, cn } from "@/lib/utils";
 import { NOTE_THEMES } from "../constants/themes";
 
-export function NoteCard({ note, onEdit, onDelete }) {
+export function NoteCard({ note, onView, onEdit, onDelete }) {
   const [passcodeOpen, setPasscodeOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const theme = NOTE_THEMES[note.theme] ?? NOTE_THEMES.sakura;
@@ -23,9 +23,14 @@ export function NoteCard({ note, onEdit, onDelete }) {
       whileHover={{ y: -4 }}
       transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        "masonry-item relative overflow-hidden rounded-xl p-5 shadow-card transition-shadow hover:shadow-hover",
+        "masonry-item relative cursor-pointer overflow-hidden rounded-xl p-5 shadow-card transition-shadow hover:shadow-hover",
         theme.bg
       )}
+      onClick={() => onView(note)}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onView(note); } }}
+      role="button"
+      tabIndex={0}
+      aria-label={`View ${note.title}`}
     >
       <span
         aria-hidden
@@ -51,7 +56,7 @@ export function NoteCard({ note, onEdit, onDelete }) {
           {note.content}
         </p>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mt-4 flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
           <span className="text-xs text-muted-foreground">
             {formatDate(note.updatedAt)}
           </span>
