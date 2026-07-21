@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Pinterest-inspired light theme */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 7%;
+    --surface: 0 0% 100%;
+
+    --primary: 354 100% 45%;
+    --primary-hover: 354 100% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 354 90% 96%;
+    --accent-foreground: 354 100% 38%;
+
+    --success: 145 63% 32%;
+    --warning: 38 92% 50%;
+    --error: 354 100% 45%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 354 100% 45%;
+
+    --radius: 16px;
+  }
+
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 96%;
+    --surface: 0 0% 10%;
+
+    --primary: 354 90% 55%;
+    --primary-hover: 354 90% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 62%;
+
+    --accent: 354 40% 18%;
+    --accent-foreground: 354 90% 75%;
+
+    --success: 145 55% 45%;
+    --warning: 38 92% 55%;
+    --error: 354 90% 60%;
+
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 354 90% 55%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  ::selection {
+    @apply bg-primary/20;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer utilities {
+  .masonry {
+    column-gap: 1.25rem;
+  }
+  .masonry-sm {
+    column-count: 1;
+  }
+  @media (min-width: 640px) {
+    .masonry-sm {
+      column-count: 2;
+    }
+  }
+  @media (min-width: 1024px) {
+    .masonry-sm {
+      column-count: 3;
+    }
+  }
+  @media (min-width: 1440px) {
+    .masonry-sm {
+      column-count: 4;
+    }
+  }
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 1.25rem;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+}
