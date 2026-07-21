@@ -5,9 +5,9 @@ import { GIST_ID_KEY } from "@/constants/storage-keys";
 import { readStorage, writeStorage, subscribeToWrites } from "@/lib/storage";
 import {
   validateToken,
-  createGist,
   readGist,
   updateGist,
+  resolveGistId,
   mergeData,
 } from "@/lib/gist";
 
@@ -51,27 +51,35 @@ export function GistSyncProvider({ children }) {
   // Pull from gist — suppress push subscriber during pull
   const pullFromGist = useCallback(async () => {
     const t = tokenRef.current;
-    const g = gistId;
-    if (!t || !g) return;
+    if (!t) return;
 
     try {
       setStatus("syncing");
       suppressPushRef.current = true;
-      const remote = await readGist(t, g);
+
+      let g = gistId;
+      let remote = g ? await readGist(t, g) : null;
+
+      // If no cached gist or it's gone, resolve the correct one
       if (!remote) {
-        setStatus("error");
-        return;
+        g = await resolveGistId(t, g);
+        saveGistId(g);
+        remote = await readGist(t, g);
       }
-      const local = readStorage();
-      const merged = mergeData(local, remote);
-      writeStorage(merged);
+
+      if (remote) {
+        const local = readStorage();
+        const merged = mergeData(local, remote);
+        writeStorage(merged);
+      }
+
       suppressPushRef.current = false;
-      setStatus("synced");
+      setStatus(remote ? "synced" : "error");
     } catch {
       suppressPushRef.current = false;
       setStatus("error");
     }
-  }, [gistId]);
+  }, [gistId, saveGistId]);
 
   // Push to gist — called after every write
   const pushToGist = useCallback(async (data) => {
@@ -101,7 +109,7 @@ export function GistSyncProvider({ children }) {
     return unsub;
   }, [gistId, pushToGist]);
 
-  // Connect: validate token → create or find gist → pull
+  // Connect: validate token → resolve gist (search before create) → pull
   const connect = useCallback(async (inputToken) => {
     const result = await validateToken(inputToken);
     if (!result.valid) throw new Error("Invalid token");
@@ -109,11 +117,9 @@ export function GistSyncProvider({ children }) {
     setToken(inputToken);
     setUsername(result.username);
 
-    let id = gistId;
-    if (!id) {
-      id = await createGist(inputToken);
-      saveGistId(id);
-    }
+    // Resolve the correct gist ID — verifies cached, searches existing, creates only if needed
+    const id = await resolveGistId(inputToken, gistId);
+    saveGistId(id);
 
     // Pull latest data
     suppressPushRef.current = true;
