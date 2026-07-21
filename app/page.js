@@ -17,7 +17,7 @@ import { formatDate } from "@/lib/utils";
 
 export default function DashboardPage() {
   const { rawVideos, isLoading: videosLoading, deleteVideo } = useVideos();
-  const { notes, isLoading: notesLoading, editNote, deleteNote } = useNotes();
+  const { notes, isLoading: notesLoading, addNote, editNote, deleteNote } = useNotes();
   const [editingNote, setEditingNote] = useState(null);
   const [noteDialogOpen, setNoteDialogOpen] = useState(false);
 
@@ -143,6 +143,7 @@ export default function DashboardPage() {
         open={noteDialogOpen}
         onOpenChange={setNoteDialogOpen}
         note={editingNote}
+        onCreate={addNote}
         onUpdate={editNote}
       />
     </div>

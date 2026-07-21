@@ -24,7 +24,7 @@ export function ConfirmDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent role="alertdialog" aria-describedby="confirm-description">
+      <DialogContent role="alertdialog" aria-describedby={description ? "confirm-description" : undefined}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && (

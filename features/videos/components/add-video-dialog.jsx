@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Loader2 } from "lucide-react";
@@ -30,6 +30,12 @@ export function AddVideoDialog({ onAdd, isAdding, open, onOpenChange }) {
     reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(videoUrlSchema), defaultValues: { url: "" } });
+
+  useEffect(() => {
+    if (dialogOpen) {
+      reset({ url: "" });
+    }
+  }, [dialogOpen, reset]);
 
   const onSubmit = async ({ url }) => {
     const success = await onAdd(url);
