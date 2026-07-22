@@ -42,20 +42,20 @@ export function useVideos() {
     }
   }, []);
 
-  const deleteVideo = useCallback((id) => {
-    deleteVideoRecord(id);
+  const deleteVideo = useCallback(async (id) => {
+    await deleteVideoRecord(id);
     setVideos((prev) => prev.filter((v) => v.id !== id));
     toast.success("Video removed.");
   }, []);
 
-  const reorder = useCallback((orderedVideos) => {
+  const reorder = useCallback(async (orderedVideos) => {
     setVideos(orderedVideos);
-    reorderVideoRecords(orderedVideos);
+    await reorderVideoRecords(orderedVideos);
   }, []);
 
-  const changeSort = useCallback((value) => {
+  const changeSort = useCallback(async (value) => {
     setSort(value);
-    persistVideoSort(value);
+    await persistVideoSort(value);
   }, []);
 
   const sortedVideos = useMemo(() => {

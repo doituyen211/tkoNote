@@ -22,15 +22,15 @@ export function useNotes() {
     setIsLoading(false);
   }, []);
 
-  const addNote = useCallback((input) => {
-    const record = createNote(input);
+  const addNote = useCallback(async (input) => {
+    const record = await createNote(input);
     setNotes((prev) => [...prev, record]);
     toast.success("Note saved.");
     return record;
   }, []);
 
-  const editNote = useCallback((id, input) => {
-    const record = updateNote(id, input);
+  const editNote = useCallback(async (id, input) => {
+    const record = await updateNote(id, input);
     if (record) {
       setNotes((prev) => prev.map((n) => (n.id === id ? record : n)));
       toast.success("Note updated.");
@@ -38,15 +38,15 @@ export function useNotes() {
     return record;
   }, []);
 
-  const deleteNote = useCallback((id) => {
-    deleteNoteRecord(id);
+  const deleteNote = useCallback(async (id) => {
+    await deleteNoteRecord(id);
     setNotes((prev) => prev.filter((n) => n.id !== id));
     toast.success("Note deleted.");
   }, []);
 
-  const changeSort = useCallback((value) => {
+  const changeSort = useCallback(async (value) => {
     setSort(value);
-    persistNoteSort(value);
+    await persistNoteSort(value);
   }, []);
 
   const sortedNotes = useMemo(() => {

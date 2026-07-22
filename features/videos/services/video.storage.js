@@ -1,4 +1,4 @@
-import { readStorage, writeStorage } from "@/lib/storage";
+import { readStorage, save } from "@/lib/storage";
 import { generateId } from "@/lib/utils";
 import { extractYoutubeVideoId, getThumbnailUrl } from "../utils/youtube-parser";
 import { fetchVideoTitle } from "./youtube.service";
@@ -49,32 +49,32 @@ export async function addVideoFromUrl(rawUrl) {
     order: state.videos.length,
   };
 
-  writeStorage({ ...state, videos: [...state.videos, record] });
+  await save({ ...state, videos: [...state.videos, record] });
   return record;
 }
 
 /**
  * @param {string} id
  */
-export function deleteVideo(id) {
+export async function deleteVideo(id) {
   const state = readStorage();
-  writeStorage({ ...state, videos: state.videos.filter((v) => v.id !== id) });
+  await save({ ...state, videos: state.videos.filter((v) => v.id !== id) });
 }
 
 /**
  * Persists a new relative order after a drag-and-drop reorder.
  * @param {VideoRecord[]} orderedVideos
  */
-export function reorderVideos(orderedVideos) {
+export async function reorderVideos(orderedVideos) {
   const state = readStorage();
   const withOrder = orderedVideos.map((v, index) => ({ ...v, order: index }));
-  writeStorage({ ...state, videos: withOrder });
+  await save({ ...state, videos: withOrder });
 }
 
 /**
  * @param {"newest"|"oldest"|"alphabetical"} sort
  */
-export function setVideoSort(sort) {
+export async function setVideoSort(sort) {
   const state = readStorage();
-  writeStorage({ ...state, settings: { ...state.settings, videoSort: sort } });
+  await save({ ...state, settings: { ...state.settings, videoSort: sort } });
 }

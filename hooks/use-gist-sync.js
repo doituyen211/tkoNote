@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { GIST_ID_KEY } from "@/constants/storage-keys";
-import { readStorage, writeStorage, subscribeToWrites } from "@/lib/storage";
+import { readStorage, writeStorage, setSaveHandler } from "@/lib/storage";
 import {
   validateToken,
   readGist,
@@ -18,9 +18,10 @@ export function GistSyncProvider({ children }) {
   const [gistId, setGistId] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | syncing | synced | error
   const [username, setUsername] = useState(null);
-  const syncingRef = useRef(false);
   const tokenRef = useRef(null);
-  const suppressPushRef = useRef(false); // suppress push during pull to avoid loop
+  const uploadingRef = useRef(false);
+  const pendingPayloadRef = useRef(null);
+  const lastUploadedRef = useRef(null); // JSON string of last successful upload, for dedup
 
   const setToken = useCallback((value) => {
     setTokenState(value);
@@ -48,19 +49,66 @@ export function GistSyncProvider({ children }) {
     }
   }, []);
 
-  // Pull from gist — suppress push subscriber during pull
+  // Process queued uploads sequentially — never concurrent
+  const flush = useCallback(async () => {
+    if (uploadingRef.current) return;
+    uploadingRef.current = true;
+
+    try {
+      while (pendingPayloadRef.current) {
+        const data = pendingPayloadRef.current;
+        pendingPayloadRef.current = null;
+
+        const serialized = JSON.stringify(data);
+        if (serialized === lastUploadedRef.current) {
+          setStatus("synced");
+          continue;
+        }
+
+        setStatus("syncing");
+        await updateGist(tokenRef.current, gistId, data);
+        lastUploadedRef.current = serialized;
+        setStatus("synced");
+      }
+    } catch {
+      setStatus("error");
+    } finally {
+      uploadingRef.current = false;
+    }
+
+    // If more data was queued while the finally block ran, restart
+    if (pendingPayloadRef.current) {
+      flush();
+    }
+  }, [gistId]);
+
+  // Registered as the save handler — called by save() after local persistence
+  // Stores the latest payload and triggers sequential upload
+  const onSave = useCallback(async (payload) => {
+    if (!tokenRef.current || !gistId) return;
+    pendingPayloadRef.current = payload;
+    if (!uploadingRef.current) {
+      flush();
+    }
+  }, [gistId, flush]);
+
+  // Register the save handler once on mount; unregister on unmount
+  useEffect(() => {
+    setSaveHandler(onSave);
+    return () => setSaveHandler(null);
+  }, [onSave]);
+
+  // Pull from gist — uses writeStorage (no sync trigger)
   const pullFromGist = useCallback(async () => {
     const t = tokenRef.current;
     if (!t) return;
 
     try {
       setStatus("syncing");
-      suppressPushRef.current = true;
 
       let g = gistId;
       let remote = g ? await readGist(t, g) : null;
 
-      // If no cached gist or it's gone, resolve the correct one
       if (!remote) {
         g = await resolveGistId(t, g);
         saveGistId(g);
@@ -73,43 +121,29 @@ export function GistSyncProvider({ children }) {
         writeStorage(merged);
       }
 
-      suppressPushRef.current = false;
       setStatus(remote ? "synced" : "error");
     } catch {
-      suppressPushRef.current = false;
       setStatus("error");
     }
   }, [gistId, saveGistId]);
 
-  // Push to gist — called after every write
+  // Push to gist — exposed for manual use; prefer save() for consistency
   const pushToGist = useCallback(async (data) => {
     const t = tokenRef.current;
     const g = gistId;
-    if (!t || !g || syncingRef.current) return;
+    if (!t || !g) return;
 
     try {
-      syncingRef.current = true;
       setStatus("syncing");
       await updateGist(t, g, data);
+      lastUploadedRef.current = JSON.stringify(data);
       setStatus("synced");
     } catch {
       setStatus("error");
-    } finally {
-      syncingRef.current = false;
     }
   }, [gistId]);
 
-  // Subscribe to localStorage writes → auto-push to gist
-  useEffect(() => {
-    if (!tokenRef.current || !gistId) return;
-    const unsub = subscribeToWrites((data) => {
-      if (suppressPushRef.current) return;
-      pushToGist(data);
-    });
-    return unsub;
-  }, [gistId, pushToGist]);
-
-  // Connect: validate token → resolve gist (search before create) → pull
+  // Connect: validate token → resolve gist → pull remote data
   const connect = useCallback(async (inputToken) => {
     const result = await validateToken(inputToken);
     if (!result.valid) throw new Error("Invalid token");
@@ -117,19 +151,15 @@ export function GistSyncProvider({ children }) {
     setToken(inputToken);
     setUsername(result.username);
 
-    // Resolve the correct gist ID — verifies cached, searches existing, creates only if needed
     const id = await resolveGistId(inputToken, gistId);
     saveGistId(id);
 
-    // Pull latest data
-    suppressPushRef.current = true;
     const remote = await readGist(inputToken, id);
     if (remote) {
       const local = readStorage();
       const merged = mergeData(local, remote);
       writeStorage(merged);
     }
-    suppressPushRef.current = false;
 
     setStatus("synced");
     return result.username;
@@ -142,12 +172,19 @@ export function GistSyncProvider({ children }) {
     setUsername(null);
     clearGistId();
     setStatus("idle");
+    pendingPayloadRef.current = null;
+    lastUploadedRef.current = null;
   }, [clearGistId]);
 
-  // Retry after error
+  // Retry after error — uploads the latest local state
   const retry = useCallback(async () => {
-    await pullFromGist();
-  }, [pullFromGist]);
+    if (!tokenRef.current || !gistId) return;
+    const data = readStorage();
+    pendingPayloadRef.current = data;
+    if (!uploadingRef.current) {
+      flush();
+    }
+  }, [gistId, flush]);
 
   const value = {
     token,

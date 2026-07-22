@@ -1,4 +1,4 @@
-import { readStorage, writeStorage } from "@/lib/storage";
+import { readStorage, save } from "@/lib/storage";
 import { generateId } from "@/lib/utils";
 
 /**
@@ -19,7 +19,7 @@ export function getAllNotes() {
  * @param {{title:string, content:string, theme:string}} input
  * @returns {NoteRecord}
  */
-export function createNote(input) {
+export async function createNote(input) {
   const state = readStorage();
   const now = new Date().toISOString();
 
@@ -33,7 +33,7 @@ export function createNote(input) {
     updatedAt: now,
   };
 
-  writeStorage({ ...state, notes: [...state.notes, record] });
+  await save({ ...state, notes: [...state.notes, record] });
   return record;
 }
 
@@ -42,7 +42,7 @@ export function createNote(input) {
  * @param {{title:string, content:string, theme:string}} input
  * @returns {NoteRecord|null}
  */
-export function updateNote(id, input) {
+export async function updateNote(id, input) {
   const state = readStorage();
   let updated = null;
 
@@ -52,22 +52,22 @@ export function updateNote(id, input) {
     return updated;
   });
 
-  writeStorage({ ...state, notes });
+  await save({ ...state, notes });
   return updated;
 }
 
 /**
  * @param {string} id
  */
-export function deleteNote(id) {
+export async function deleteNote(id) {
   const state = readStorage();
-  writeStorage({ ...state, notes: state.notes.filter((n) => n.id !== id) });
+  await save({ ...state, notes: state.notes.filter((n) => n.id !== id) });
 }
 
 /**
  * @param {"newest"|"oldest"|"theme"} sort
  */
-export function setNoteSort(sort) {
+export async function setNoteSort(sort) {
   const state = readStorage();
-  writeStorage({ ...state, settings: { ...state.settings, noteSort: sort } });
+  await save({ ...state, settings: { ...state.settings, noteSort: sort } });
 }
